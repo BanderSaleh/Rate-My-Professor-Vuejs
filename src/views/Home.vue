@@ -10,8 +10,18 @@
 
     <h1>All Professors:</h1>
     <div v-for="professor in professors">
-      <h2>{{ professor.id }} {{ professor.name }} {{ professor.email }}  </h2>
+      <h2>{{ professor }}  </h2>
       <!-- <h2>{{ professor }} </h2> -->
+    </div>
+
+    <h1>Create New Professor:</h1>
+    <div>
+      name: <input type="text" v-model="newName" />
+      email: <input type="text" v-model="newEmail" />
+      title: <input type="text" v-model="newTitle" />
+      school: <input type="text" v-model="newSchool" />
+      department: <input type="text" v-model="newDepartment" />
+      <button v-on:click="createProfessor()">Create Professor</button>
     </div>
 
     <h1>All Reviews:</h1>
@@ -51,6 +61,11 @@ export default {
       newProfessorID: "",
       newProfessorRating: "",
       newProfessorText: "",
+      newName: "",
+      newEmail: "",
+      newTitle: "",
+      newSchool: "",
+      newDepartment: "",
     };
   },
   created: function() {
@@ -92,8 +107,28 @@ export default {
         this.newProfessorRating = "";
         this.newProfessorText = "";
 
+      });
+    },
+    createProfessor: function() {
+      var params = {
+        name: this.newName,
+        email: this.newEmail,
+        title: this.newTitle,
+        school: this.newSchool,
+        department: this.newDepartment,
+      };
+      axios
+      .post("/professors", params)
+      .then(response => {
+        console.log("professor create", response);
+        this.professors.push(response.data);
+        this.newName = "";
+        this.newEmail = "";
+        this.newTitle = "";
+        this.newSchool = "";
+        this.newDepartment = "";
       })
     }
-  },
+  }
 };
 </script>
