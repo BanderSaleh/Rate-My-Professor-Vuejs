@@ -1,8 +1,8 @@
 <template>
   <div class="home">
-    <h1>All Users:</h1>
+    <!-- <h1>All Users:</h1> -->
     <div v-for="user in users">
-      <h2>{{ user.email }}</h2>
+      <!-- <h2>{{ user.email }}</h2> -->
       <!-- <img v-bind:src="photo.url" v-bind:alt="photo.name" />
       <p>Width: {{ photo.width }}</p>
       <p>Height: {{ photo.height }}</p> -->
@@ -10,7 +10,7 @@
 
     <h1>All Professors:</h1>
     <div v-for="professor in professors">
-      <h2>{{ professor.name }}</h2>
+      <h2>{{ professor.id }} {{ professor.name }} {{ professor.email }}  </h2>
       <!-- <h2>{{ professor }} </h2> -->
     </div>
 
@@ -18,6 +18,20 @@
     <div v-for="review in reviews">
       <h2>{{ review }}</h2>
     </div>
+
+    <h1>New Review Form:</h1>
+    <div>
+      professor_id: <input type="text" v-model="newProfessorID" />
+      rating: <input type="text" v-model="newProfessorRating" />
+      text: <input type="text" v-model="newProfessorText" />
+      <button v-on:click="createReview()">Create Review</button>
+    </div>
+    
+
+
+
+
+
 
   </div>
 </template>
@@ -34,6 +48,9 @@ export default {
       professors: [],
       users: [],
       reviews: [],
+      newProfessorID: "",
+      newProfessorRating: "",
+      newProfessorText: "",
     };
   },
   created: function() {
@@ -60,6 +77,23 @@ export default {
         this.reviews = response.data;
       });
     },
+    createReview: function() {
+      var params = {
+        professor_id: this.newProfessorID,
+        rating: this.newProfessorRating,
+        text: this.newProfessorText,
+      };
+      axios
+      .post("/reviews", params)
+      .then(response => {
+        console.log("review create", response);
+        this.reviews.push(response.data);
+        this.newProfessorID = "";
+        this.newProfessorRating = "";
+        this.newProfessorText = "";
+
+      })
+    }
   },
 };
 </script>
