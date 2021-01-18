@@ -10,7 +10,10 @@
 
     <h1>All Professors:</h1>
     <div v-for="professor in professors">
-      <h2>{{ professor }}  </h2>
+      <button v-on:click="reviews.visible = !reviews.visible">{{ professor.name }}</button>
+      <div class="hidden" v-show="!reviews.visible">
+        <p> {{ reviews }} </p>
+      </div>
       <!-- <h2>{{ professor }} </h2> -->
     </div>
 
@@ -90,6 +93,8 @@ export default {
       axios.get("/reviews/").then(response => {
         console.log("reviews index", response);
         this.reviews = response.data;
+        reviews.visible = true;
+        return reviews;
       });
     },
     createReview: function() {
