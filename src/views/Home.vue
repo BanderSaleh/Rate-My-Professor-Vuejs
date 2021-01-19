@@ -12,19 +12,27 @@
     <div v-for="professor in professors">
       <h2>{{ professor }}</h2>
       <button v-on:click="createReviewModal()">Create Review</button>
-      <button v-on:click="reviews.visible = !reviews.visible">{{ professor.name }}</button>
-      <div class="hidden" v-show="!reviews.visible">
-        <p> {{ reviews }} </p>
+      <button v-on:click="professor.visible = !professor.visible">
+        {{ professor.name }}
+      </button>
+      <div class="hidden" v-show="professor.visible">
+        <p v-for="review in professor.reviews">
+          Rating: {{ review.rating }} <br />
+          Review: {{ review.text }}
+        </p>
       </div>
-      <!-- <h2>{{ professor }} </h2> -->
     </div>
 
     <dialog id="review-form">
       <form method="dialog">
-        <!-- <p>professor_id: <input type="text" v-model="newProfessorID" /></p> -->
         <p>
           Professor id:
-          <input type="text" size="4" v-model="newProfessorID" />
+          <input
+            type="number"
+            min="1"
+            :max="professors.length"
+            v-model="newProfessorID"
+          />
         </p>
         <p>
           Rate your professor (1-10):
@@ -32,7 +40,17 @@
         </p>
         <textarea v-model="newProfessorText" rows="8" cols="50"> </textarea>
         <br />
-        <button v-on:click="createReview()">Create Review</button>
+        <button
+          v-if="
+            newProfessorRating >= 1 &&
+              newProfessorRating <= 10 &&
+              newProfessorID >= 1 &&
+              newProfessorID <= professors.length
+          "
+          v-on:click="createReview()"
+        >
+          Create Review
+        </button>
         <button>Close</button>
       </form></dialog
     >
@@ -52,13 +70,13 @@
       <h2>{{ review }}</h2>
     </div>
 
-    <h1>New Review Form:</h1>
+    <!-- <h1>New Review Form:</h1>
     <div>
       professor_id: <input type="text" v-model="newProfessorID" /> rating:
       <input type="text" v-model="newProfessorRating" /> text:
       <input type="text" v-model="newProfessorText" />
       <button v-on:click="createReview()">Create Review</button>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -105,13 +123,11 @@ export default {
       axios.get("/reviews/").then((response) => {
         console.log("reviews index", response);
         this.reviews = response.data;
-        reviews.visible = true;
-        return reviews;
+        this.reviews.visible = true;
+        return this.reviews;
       });
     },
     createReviewModal: function() {
-      // console.log(recipe.title);
-      // this.currentRecipe = recipe;
       document.querySelector("#review-form").showModal();
     },
     createReview: function() {
