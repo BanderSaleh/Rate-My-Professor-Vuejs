@@ -11,28 +11,48 @@
     <h1>All Professors:</h1>
     <div v-for="professor in professors">
       <h2>{{ professor }}</h2>
+      <h3>
+        Rating:
+        {{ avgReview(professor) }}
+      </h3>
       <button v-on:click="createReviewModal()">Create Review</button>
-      <button v-on:click="reviews.visible = !reviews.visible">{{ professor.name }}</button>
-      <div class="hidden" v-show="!reviews.visible">
-        <p> {{ reviews }} </p>
+      <button v-on:click="professor.visible = !professor.visible">
+        {{ professor.name }}
+      </button>
+      <div class="hidden" v-show="professor.visible">
+        <p v-for="review in professor.reviews">
+          Rating: {{ review.rating }} <br />
+          Review: {{ review.text }}
+        </p>
       </div>
-      <!-- <h2>{{ professor }} </h2> -->
     </div>
 
     <dialog id="review-form">
       <form method="dialog">
-        <!-- <p>professor_id: <input type="text" v-model="newProfessorID" /></p> -->
-        <p>
+        <select v-model="newProfessorID">
+          <option selected value="">Professor Name</option>
+          <option :value="professor.id" v-for="professor in professors">
+            {{ professor.name }}
+          </option>
+        </select>
+        <!-- <p>
           Professor id:
-          <input type="text" size="4" v-model="newProfessorID" />
-        </p>
+          <input
+            type="number"
+            min="1"
+            :max="professors.length"
+            v-model="newProfessorID"
+          />
+        </p> -->
         <p>
           Rate your professor (1-10):
           <input type="number" max="10" min="1" v-model="newProfessorRating" />
         </p>
         <textarea v-model="newProfessorText" rows="8" cols="50"> </textarea>
         <br />
-        <button v-on:click="createReview()">Create Review</button>
+        <button v-on:click="createReview()">
+          Create Review
+        </button>
         <button>Close</button>
       </form></dialog
     >
@@ -50,14 +70,6 @@
     <h1>All Reviews:</h1>
     <div v-for="review in reviews">
       <h2>{{ review }}</h2>
-    </div>
-
-    <h1>New Review Form:</h1>
-    <div>
-      professor_id: <input type="text" v-model="newProfessorID" /> rating:
-      <input type="text" v-model="newProfessorRating" /> text:
-      <input type="text" v-model="newProfessorText" />
-      <button v-on:click="createReview()">Create Review</button>
     </div>
   </div>
 </template>
@@ -105,13 +117,11 @@ export default {
       axios.get("/reviews/").then((response) => {
         console.log("reviews index", response);
         this.reviews = response.data;
-        reviews.visible = true;
-        return reviews;
+        this.reviews.visible = true;
+        return this.reviews;
       });
     },
     createReviewModal: function() {
-      // console.log(recipe.title);
-      // this.currentRecipe = recipe;
       document.querySelector("#review-form").showModal();
     },
     createReview: function() {
@@ -120,13 +130,26 @@ export default {
         rating: this.newProfessorRating,
         text: this.newProfessorText,
       };
-      axios.post("/reviews", params).then((response) => {
-        console.log("review create", response);
-        this.reviews.push(response.data);
-        this.newProfessorID = "";
-        this.newProfessorRating = "";
-        this.newProfessorText = "";
-      });
+      if (
+        this.newProfessorRating >= 1 &&
+        this.newProfessorRating <= 10 &&
+        this.newProfessorID >= 1 &&
+        this.newProfessorID <= this.professors.length
+      ) {
+        axios.post("/reviews", params).then((response) => {
+          console.log("review create", response);
+          this.reviews.push(response.data);
+          this.newProfessorID = "";
+          this.newProfessorRating = "";
+          this.newProfessorText = "";
+        });
+      }
+    },
+    avgReview: function(professor) {
+      return (
+        professor.reviews.map((x) => x.rating).reduce((a, b) => a + b) /
+        professor.reviews.length
+      ).toFixed(1);
     },
     createProfessor: function() {
       var params = {
