@@ -29,7 +29,13 @@
 
     <dialog id="review-form">
       <form method="dialog">
-        <p>
+        <select v-model="newProfessorID">
+          <option selected value="">Professor Name</option>
+          <option :value="professor.id" v-for="professor in professors">
+            {{ professor.name }}
+          </option>
+        </select>
+        <!-- <p>
           Professor id:
           <input
             type="number"
@@ -37,7 +43,7 @@
             :max="professors.length"
             v-model="newProfessorID"
           />
-        </p>
+        </p> -->
         <p>
           Rate your professor (1-10):
           <input type="number" max="10" min="1" v-model="newProfessorRating" />
