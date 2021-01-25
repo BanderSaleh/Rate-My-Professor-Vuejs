@@ -11,6 +11,10 @@
     <h1>All Professors:</h1>
     <div v-for="professor in professors">
       <h2>{{ professor }}</h2>
+      <h3>
+        Rating:
+        {{ avgReview(professor) }}
+      </h3>
       <button v-on:click="createReviewModal()">Create Review</button>
       <button v-on:click="professor.visible = !professor.visible">
         {{ professor.name }}
@@ -40,15 +44,7 @@
         </p>
         <textarea v-model="newProfessorText" rows="8" cols="50"> </textarea>
         <br />
-        <button
-          v-if="
-            newProfessorRating >= 1 &&
-              newProfessorRating <= 10 &&
-              newProfessorID >= 1 &&
-              newProfessorID <= professors.length
-          "
-          v-on:click="createReview()"
-        >
+        <button v-on:click="createReview()">
           Create Review
         </button>
         <button>Close</button>
@@ -69,14 +65,6 @@
     <div v-for="review in reviews">
       <h2>{{ review }}</h2>
     </div>
-
-    <!-- <h1>New Review Form:</h1>
-    <div>
-      professor_id: <input type="text" v-model="newProfessorID" /> rating:
-      <input type="text" v-model="newProfessorRating" /> text:
-      <input type="text" v-model="newProfessorText" />
-      <button v-on:click="createReview()">Create Review</button>
-    </div> -->
   </div>
 </template>
 
@@ -136,13 +124,26 @@ export default {
         rating: this.newProfessorRating,
         text: this.newProfessorText,
       };
-      axios.post("/reviews", params).then((response) => {
-        console.log("review create", response);
-        this.reviews.push(response.data);
-        this.newProfessorID = "";
-        this.newProfessorRating = "";
-        this.newProfessorText = "";
-      });
+      if (
+        this.newProfessorRating >= 1 &&
+        this.newProfessorRating <= 10 &&
+        this.newProfessorID >= 1 &&
+        this.newProfessorID <= this.professors.length
+      ) {
+        axios.post("/reviews", params).then((response) => {
+          console.log("review create", response);
+          this.reviews.push(response.data);
+          this.newProfessorID = "";
+          this.newProfessorRating = "";
+          this.newProfessorText = "";
+        });
+      }
+    },
+    avgReview: function(professor) {
+      return (
+        professor.reviews.map((x) => x.rating).reduce((a, b) => a + b) /
+        professor.reviews.length
+      ).toFixed(1);
     },
     createProfessor: function() {
       var params = {
