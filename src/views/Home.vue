@@ -17,7 +17,7 @@
       </h3>
       <button v-on:click="createReviewModal()">Create Review</button>
       <button v-on:click="professor.visible = !professor.visible">
-        {{ professor.name }}
+        Reviews
       </button>
       <div class="hidden" v-show="professor.visible">
         <p v-for="review in professor.reviews">
