@@ -31,19 +31,18 @@
                 >
                   Create Review
                 </button>
+
                 <button
                   class="btn btn-primary"
                   v-if="professor.reviews.length > 0"
-                  v-on:click="professor.visible = !professor.visible"
+                  v-on:click="showReviewsModal(professor)"
                 >
                   Reviews
                 </button>
-              </div>
-              <div class="hidden" v-show="professor.visible">
-                <p v-for="review in professor.reviews">
-                  Rating: {{ review.rating }} <br />
-                  Review: {{ review.text }}
-                </p>
+
+                <!-- <button v-on:click="professor.visible = !professor.visible">
+                  Reviews
+                </button> -->
               </div>
             </div>
           </div>
@@ -62,10 +61,25 @@
 
     <NewProfessorModal :handleSubmit="createProfessor" />
 
+    <dialog id="review-index">
+      <form method="dialog">
+        <h4>Reviews</h4>
+        <div v-for="review in professorReviews">
+          <p>
+            Rating: {{ review.rating }} <br />
+            {{ review.text }}
+          </p>
+        </div>
+        <button>Close</button>
+      </form>
+    </dialog>
+
     <dialog id="review-form">
       <form method="dialog">
         <h2>{{ professorName }}</h2>
         <p>
+          <!-- Your name:
+          <input type="" v-model="name" /> <br /> -->
           Rate your professor (1-10):
           <input type="number" max="10" min="1" v-model="newProfessorRating" />
         </p>
@@ -95,6 +109,7 @@ export default {
       newProfessorID: "",
       newProfessorRating: "",
       newProfessorText: "",
+      professorReviews: "",
     };
   },
   components: {
@@ -158,6 +173,11 @@ export default {
         );
       }
       return "Be the first to submit a review.";
+    },
+    showReviewsModal: function(professor) {
+      document.querySelector("#review-index").showModal();
+      // var professorReviews = professor.reviews;
+      this.professorReviews = professor.reviews;
     },
     createProfessorModal: function() {
       document.querySelector("#professor-form").showModal();
