@@ -59,9 +59,11 @@
       </div>
     </div>
 
+    <ProfessorReviewsModal :reviews="professorReviews" />
+
     <NewProfessorModal :handleSubmit="createProfessor" />
 
-    <dialog id="review-index">
+    <!-- <dialog id="review-index">
       <form method="dialog">
         <h4>Reviews</h4>
         <div v-for="review in professorReviews">
@@ -72,7 +74,7 @@
         </div>
         <button>Close</button>
       </form>
-    </dialog>
+    </dialog> -->
 
     <dialog id="review-form">
       <form method="dialog">
@@ -99,6 +101,8 @@
 <script>
 import axios from "axios";
 import NewProfessorModal from "../components/NewProfessorModal";
+import ProfessorReviewsModal from "../components/ProfessorReviewsModal";
+
 export default {
   data: function() {
     return {
@@ -114,6 +118,7 @@ export default {
   },
   components: {
     NewProfessorModal,
+    ProfessorReviewsModal,
   },
   created: function() {
     this.indexProfessors();
@@ -176,7 +181,6 @@ export default {
     },
     showReviewsModal: function(professor) {
       document.querySelector("#review-index").showModal();
-      // var professorReviews = professor.reviews;
       this.professorReviews = professor.reviews;
     },
     createProfessorModal: function() {
