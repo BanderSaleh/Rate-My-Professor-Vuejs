@@ -8,7 +8,7 @@
           {{ review.text }}
         </p>
       </div>
-      <button>Close</button>
+      <button class="btn btn-outline-primary">Close</button>
     </form>
   </dialog>
 </template>

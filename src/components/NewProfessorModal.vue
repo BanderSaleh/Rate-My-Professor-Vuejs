@@ -1,16 +1,19 @@
 <template>
   <dialog id="professor-form">
     <form method="dialog">
-      <h1>Create New Professor:</h1>
+      <h4>Create New Professor:</h4>
       <div>
-        name: <input type="text" v-model="newName" /> email:
-        <input type="text" v-model="newEmail" /> title:
-        <input type="text" v-model="newTitle" /> school:
-        <input type="text" v-model="newSchool" /> department:
-        <input type="text" v-model="newDepartment" />
-        <button v-on:click="handleClick">Create Professor</button>
+        <p>Name: <input type="text" v-model="newName" /></p>
+
+        <p>Email: <input type="text" v-model="newEmail" /></p>
+        <p>Title: <input type="text" v-model="newTitle" /></p>
+        <p>School: <input type="text" v-model="newSchool" /></p>
+        <p>Department: <input type="text" v-model="newDepartment" /></p>
       </div>
-      <button>Close</button>
+      <button class="btn btn-outline-primary me-2" v-on:click="handleClick">
+        Create Professor
+      </button>
+      <button class="btn btn-outline-primary">Close</button>
     </form>
   </dialog>
 </template>
