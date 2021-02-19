@@ -5,6 +5,16 @@
     </div> -->
 
     <div class="row row-cols-1 row-cols-md-4 g-4">
+      <!-- <div class="col">
+        <div class="card h-100">
+          <button
+            class="card-body border-primary"
+            v-on:click="createProfessorModal()"
+          >
+            <h1>Add Professor</h1>
+          </button>
+        </div>
+      </div> -->
       <div v-for="professor in professors">
         <div class="col">
           <div class="card h-100 border-primary">
@@ -133,12 +143,13 @@ export default {
     },
     avgReview: function(professor) {
       if (professor.reviews.length > 0) {
-        return `${professor.reviews.length}
-          Reviews \xa0\xa0\xa0\xa0\xa0\xa0\xa0 Rating:
+        return `Rating:
           ${(
             professor.reviews.map((x) => x.rating).reduce((a, b) => a + b) /
             professor.reviews.length
-          ).toFixed(1)}`;
+          ).toFixed(1)} \xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0 ${
+          professor.reviews.length
+        } Reviews`;
       }
       return "Be the first to submit a review.";
     },
