@@ -3,7 +3,7 @@
     <!-- <div class="container-fluid bg-info p-3 mb-3">
       <h1>Rate My Professor</h1>
     </div> -->
-
+    <!-- <a href="#create professor">Create Professor</a> -->
     <div class="row row-cols-1 row-cols-md-4 g-4">
       <!-- <div class="col">
         <div class="card h-100">
@@ -48,15 +48,20 @@
           </div>
         </div>
       </div>
+
       <div class="col">
-        <div class="card h-100">
-          <button
-            class="card-body border-primary"
-            v-on:click="createProfessorModal()"
-          >
-            <h1>Add Professor</h1>
-          </button>
-        </div>
+        <a name="create professor">
+          <div class="card h-100">
+            <button
+              class="card-body border-primary"
+              v-on:click="createProfessorModal()"
+            >
+              <h1>
+                Add Professor
+              </h1>
+            </button>
+          </div>
+        </a>
       </div>
     </div>
 

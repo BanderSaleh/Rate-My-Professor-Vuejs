@@ -9,7 +9,3 @@ axios.defaults.baseURL =
 axios.defaults.headers.common["Authorization"] = localStorage.getItem("jwt");
 
 createApp(App).use(router).mount('#app')
-
-
-
-
